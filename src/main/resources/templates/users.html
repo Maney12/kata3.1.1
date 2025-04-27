@@ -33,7 +33,7 @@
 </table>
 
 <h2>Add new User</h2>
-<form th:action="@{/users/add}" method="post">
+<form th:action="@{/users/add}" method="post" th:object="${user}">
     Name: <input type="text" name="firstName"/><br/>
     Surname: <input type="text" name="lastName"/><br/>
     Email: <input type="text" name="email"/><br/>

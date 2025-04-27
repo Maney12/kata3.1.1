@@ -6,15 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping(value = "/users")
 public class PeopleController {
-    final
-    UserService service;
+    private final UserService service;
 
     @Autowired
     public PeopleController(UserService service) {
@@ -28,33 +27,28 @@ public class PeopleController {
     }
 
     @PostMapping("/add")
-    public String addUser(@RequestParam String firstName,
-                          @RequestParam String lastName,
-                          @RequestParam String email) {
-        User user = new User(firstName, lastName, email);
+    public String addUser(@ModelAttribute("user") User user) {
+        System.out.println("Добавляем пользователя: " + user);
         service.add(user);
         return "redirect:/users/";
     }
 
+
     @PostMapping("/delete")
-    public String deleteUser(@RequestParam Long id) {
+    public String deleteUser(@ModelAttribute("id") Long id) {
         service.deleteUserById(id);
         return "redirect:/users/";
     }
 
     @GetMapping("/edit")
-    public String editUser(@RequestParam Long id, Model model) {
+    public String editUser(@ModelAttribute("id") Long id, Model model) {
         User user = service.findById(id);
         model.addAttribute("user", user);
         return "edit";
     }
 
     @PostMapping("/update")
-    public String updateUser(@RequestParam Long id,
-                             @RequestParam String firstName,
-                             @RequestParam String lastName,
-                             @RequestParam String email) {
-        User user = new User(id, firstName, lastName, email);
+    public String updateUser(@ModelAttribute("user") User user) {
         service.updateUser(user);
         return "redirect:/users/";
     }
